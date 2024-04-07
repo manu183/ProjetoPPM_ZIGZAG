@@ -1,4 +1,6 @@
 
+
+import Utils.Direction.{Direction, addDirection}
 import Utils.{Board, Coord2D}
 
 object Tasks {
@@ -54,5 +56,37 @@ object Tasks {
     }
     }
     fillBoard(board, r)
+  }
+
+  //t5
+  def play(board:Board,palavra:String,start: Coord2D,dir:Direction):Boolean={
+    //Retorna se c esta na coordenada coord no board
+    def checkLetter(c:Char,coord:Coord2D):Boolean= {
+      c == board(coord._1)(coord._2)
+    }
+    //Lista com as 8 direções
+    val directions=Utils.Direction.values.toList
+
+
+    def playing(palavra:String,coord: Coord2D,lst:List[Coord2D]):Boolean={
+      if(palavra.isEmpty)
+        true
+      //verifica se a coordenada esta nos limites do tabuleiro
+      else if (((coord._1>board.length-1)||(coord._2>board.length-1))||
+        ((coord._1<0)||(coord._2<0)))
+          false
+
+      else if((lst.contains(coord)) || (!checkLetter(palavra.head,coord)))
+        false
+
+      else {
+        val list=directions.map(x=>playing(palavra.tail,addDirection(coord,x),coord::lst))
+        (false::list)reduceLeft(_||_)
+      }
+    }
+    if (checkLetter(palavra.head,start))
+      playing(palavra.tail,addDirection(start,dir),List(start))
+    else
+      false
   }
 }
