@@ -5,9 +5,10 @@ object Main {
     //val teste =Tasks.randomChar(MyRandom(10))
     //println(teste._1)
     //println(randomChar(teste._2)._1)
-    val board: Utils.Board = List(List('a', 'b', 'c'), List('d', 'e', 'f'), List('g', 'h', 'i'))
-    val teste=Tasks.play(board,"aea",(0,0),Direction.SouthWest)
-    print(teste)
+    val board: Utils.Board = List(List('s', 'b', 'c'), List('d', 'l', 'f'), List('b', 'h', 'i'))
+    print(Tasks.play(board,"slb",(0,0),Direction.SouthWest))
+    //val board1= Tasks.fillOneCell(board,'l',(2,0))
+    //Utils.printBoard1(board1)
     //val updatedBoard = Tasks.fillOneCell(board,'x', (1,0))
     //Utils.printBoard(updatedBoard)
   }

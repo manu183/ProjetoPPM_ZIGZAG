@@ -43,5 +43,7 @@ object Utils {
 
     printBoardRows(board)
   }
-
+  def printBoard1(board:Board):Unit={
+    board.map(x=>println(x.mkString("  ")))
+  }
 }
