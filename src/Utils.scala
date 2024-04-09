@@ -1,5 +1,7 @@
 import Utils.Coord2D
 
+import scala.annotation.tailrec
+import scala.io.Source
 import scala.sys.exit
 
 object Utils {
@@ -45,7 +47,8 @@ object Utils {
 
   }
   def jogarMenu():Int={
-    println("1-Inserir Palavra e direcao, formato-PALAVRA (y,x)")
+    println("1-Inserir Palavra , casa inicial e direcao, formato-PALAVRA (y,x) 0-8")
+    println(Direction.values)
     println("2-Reiniciar")
     println("0-Sair")
     scala.io.StdIn.readInt() match {
@@ -55,6 +58,7 @@ object Utils {
       case 3=>3
     }
   }
+  @tailrec
   def colorMenu(): Unit = {
     println("1:Vermelho")
     println("2:Azul")
@@ -69,6 +73,32 @@ object Utils {
     }
   }
   def getPlay():(String,Coord2D)={
+  _
+  }
+  def readFromFile(file: String): (Int, Int, List[String], List[List[Coord2D]]) = {
+    val bufferedSource = Source.fromFile(file)
+    val lines = bufferedSource.getLines().toList
+    bufferedSource.close()
+
+    val myRandom = lines.head.toInt
+    val boardSize = lines(1).toInt
+
+
+    def readLine(line: String): (String, List[Coord2D]) = {
+      val parts = line.split(" ").toList
+      val word = parts.head
+      val coordinates = parts.tail.map(str => {
+        val Array(x, y) = str.stripPrefix("(").stripSuffix(")").split(",")
+        (x.toInt, y.toInt)
+      })
+      (word, coordinates)
+    }
+
+    val words_Coordinates = lines.drop(2).map { line =>
+      readLine(line)
+    }.unzip
+
+    (myRandom, boardSize, words_Coordinates._1, words_Coordinates._2)
 
   }
 
