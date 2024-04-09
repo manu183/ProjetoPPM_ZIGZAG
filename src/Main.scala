@@ -11,6 +11,11 @@ object Main {
     //Utils.printBoard1(board1)
     //val updatedBoard = Tasks.fillOneCell(board,'x', (1,0))
     //Utils.printBoard(updatedBoard)
+
+    val home = System.getProperty("user.home")
+    val t = Utils.readFromFile(s"${home}/IdeaProjects/ProjetoPPM_ZIGZAG/src/test.txt")
+
+    println(t)
   }
 
 }
