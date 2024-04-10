@@ -1,5 +1,6 @@
 import Utils.Coord2D
 
+import java.io.{File, PrintWriter}
 import scala.annotation.tailrec
 import scala.io.Source
 import scala.sys.exit
@@ -18,12 +19,12 @@ object Utils {
       dir match {
         case North => (coord._1 - 1, coord._2)
         case South => (coord._1 + 1, coord._2)
-        case East => (coord._1, coord._2 - 1)
-        case West => (coord._1, coord._2 + 1)
-        case NorthEast => (coord._1 - 1, coord._2 - 1)
-        case NorthWest => (coord._1 - 1, coord._2 + 1)
-        case SouthEast => (coord._1 + 1, coord._2 - 1)
-        case SouthWest => (coord._1 + 1, coord._2 + 1)
+        case East => (coord._1, coord._2 + 1)
+        case West => (coord._1, coord._2 - 1)
+        case NorthEast => (coord._1 - 1, coord._2 + 1)
+        case NorthWest => (coord._1 - 1, coord._2 - 1)
+        case SouthEast => (coord._1 + 1, coord._2 + 1)
+        case SouthWest => (coord._1 + 1, coord._2 - 1)
       }
     }
   }
@@ -47,18 +48,20 @@ object Utils {
     }
 
   }
-  def jogarMenu():Int={
+
+  def jogarMenu(): Int = {
     println("1-Inserir Palavra")
     println("2-Reiniciar")
     println("0-Sair")
     scala.io.StdIn.readInt() match {
-      case 1=>1
-      case 2=>2
-      case 0=>0
-      case _=>println("Opcao Invalida")
+      case 1 => 1
+      case 2 => 2
+      case 0 => 0
+      case _ => println("Opcao Invalida")
         jogarMenu()
     }
   }
+
   @tailrec
   def colorMenu(): Unit = {
     println("1:Vermelho")
@@ -73,17 +76,19 @@ object Utils {
       case _ => colorMenu()
     }
   }
-  def getPlay():(String,Coord2D,Direction.Direction)={
+
+  def getPlay(): (String, Coord2D, Direction.Direction) = {
     println(Direction.values)
     println("Formato da jogada -PALAVRA (y,x) 0-7")
     val line = scala.io.StdIn.readLine()
     val parts = line.split(" ")
     val palavra = parts.head
     val Array(x, y) = parts(1).stripPrefix("(").stripSuffix(")").split(",")
-    val directions=Utils.Direction.values.toList
+    val directions = Utils.Direction.values.toList
 
-    (parts.head,(x.toInt,y.toInt),directions(parts(2).toInt))
+    (parts.head, (x.toInt, y.toInt), directions(parts(2).toInt))
   }
+
   def readFromFile(file: String): (Int, Int, List[String], List[List[Coord2D]]) = {
     val bufferedSource = Source.fromFile(file)
     val lines = bufferedSource.getLines().toList
@@ -91,7 +96,6 @@ object Utils {
 
     val myRandom = lines.head.toInt
     val boardSize = lines(1).toInt
-
 
     def readLine(line: String): (String, List[Coord2D]) = {
       val parts = line.split(" ").toList
@@ -110,6 +114,19 @@ object Utils {
     (myRandom, boardSize, words_Coordinates._1, words_Coordinates._2)
 
   }
-  def changeR(r:Int,ficheiro:String):Unit={}
 
+  def changeR(r: Int, file: String): Unit = {
+    val bufferedSource = Source.fromFile(file)
+    val linhas = bufferedSource.getLines.toList
+    bufferedSource.close()
+
+    val restFile = r +: linhas.drop(1)
+
+    val pw = new PrintWriter(new File(file))
+    try {
+      restFile.foreach(pw.println)
+    } finally {
+      pw.close()
+    }
+  }
 }
