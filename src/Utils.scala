@@ -32,7 +32,7 @@ object Utils {
     board.map(x => println(x.mkString("  ")))
   }
 
-  def showTakeChoice(): Unit = {
+  def firstMenu(): Unit = {
     println("1:Iniciar Tabuleiro")
     println("2:Alterar cor das letras")
     println("3:Sair")
@@ -40,22 +40,23 @@ object Utils {
       case 1 =>
       case 2 =>
         colorMenu()
-        showTakeChoice()
+        firstMenu()
       case 3 => exit(1)
-      case _ => showTakeChoice()
+      case _ => println("Opcao Invalida")
+        firstMenu()
     }
 
   }
   def jogarMenu():Int={
-    println("1-Inserir Palavra , casa inicial e direcao, formato-PALAVRA (y,x) 0-8")
-    println(Direction.values)
+    println("1-Inserir Palavra")
     println("2-Reiniciar")
     println("0-Sair")
     scala.io.StdIn.readInt() match {
       case 1=>1
       case 2=>2
       case 0=>0
-      case 3=>3
+      case _=>println("Opcao Invalida")
+        jogarMenu()
     }
   }
   @tailrec
@@ -72,8 +73,16 @@ object Utils {
       case _ => colorMenu()
     }
   }
-  def getPlay():(String,Coord2D)={
-  _
+  def getPlay():(String,Coord2D,Direction.Direction)={
+    println(Direction.values)
+    println("Formato da jogada -PALAVRA (y,x) 0-7")
+    val line = scala.io.StdIn.readLine()
+    val parts = line.split(" ")
+    val palavra = parts.head
+    val Array(x, y) = parts(1).stripPrefix("(").stripSuffix(")").split(",")
+    val directions=Utils.Direction.values.toList
+
+    (parts.head,(x.toInt,y.toInt),directions(parts(2).toInt))
   }
   def readFromFile(file: String): (Int, Int, List[String], List[List[Coord2D]]) = {
     val bufferedSource = Source.fromFile(file)
@@ -101,5 +110,6 @@ object Utils {
     (myRandom, boardSize, words_Coordinates._1, words_Coordinates._2)
 
   }
+  def changeR(r:Int,ficheiro:String):Unit={}
 
 }

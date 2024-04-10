@@ -1,21 +1,45 @@
-import Utils.{Board, Direction, jogarMenu, showTakeChoice}
+import Utils.{Board, Direction, getPlay, jogarMenu}
 
 import scala.sys.exit
 object Main {
+  val ficheiro="NOME DO FICHEIRO"
   def main(args: Array[String]): Unit = {
 
-    showTakeChoice()
-    val (r,tamanho,palavras,coordenadas) = Utils.readFromFile("teste.txt")
-    val board= Tasks.setBoardsWithWords(List.fill(tamanho, tamanho)(0),palavras,coordenadas)
-    val board1=Tasks.completeBoardRandomly(board,MyRandom(r),Tasks.randomChar)
-    jogar(board1._1,palavras,List())
-
+    Utils.firstMenu()
+    val (r,tamanho,palavras,coordenadas) = Utils.readFromFile(ficheiro)
+    val inic= Tasks.setBoardsWithWords(List.fill(tamanho, tamanho)(0),palavras,coordenadas)
+    val (board,random)=Tasks.completeBoardRandomly(inic,MyRandom(r),Tasks.randomChar)
+    Utils.changeR(r,ficheiro)
+    jogar(board,palavras,List())
   }
   def jogar(board: Board,procura:List[String],encontradas:List[String]):Unit={
-    if (procura.isEmpty) exit(1)
+    print("Palavras por encontrar--")
+    println(procura)
+    print("Palavras encontradas--")
+    println(encontradas)
+    Utils.printBoard(board)
+    if (procura.isEmpty){
+      println("GANHOU O JOGO NAO EXISTE MAIS PALAVRAS")
+      exit(1)
+    }
     Utils.jogarMenu() match  {
       case 0 =>exit(1)
-      case 1=>Utils.getPlay
+      case 1=>
+        val (palavra,coordenada,direcao)=Utils.getPlay()
+          if(procura.contains(palavra)) {
+            if(Tasks.play(board,palavra,coordenada,direcao)) {
+              println("ACERTOU A PALAVRA---"+ palavra)
+              jogar(board,procura.filterNot(_ == palavra),palavra::encontradas)
+            }
+            else{
+              print("Errou as coordenadas ou a direcao")
+              jogar(board, procura, encontradas)
+            }
+          }
+        else
+          println("A PALAVRA="+ palavra + "nao esta na lista de procura")
+          jogar(board, procura, encontradas)
+
       case 2=> main(Array())
     }
 
