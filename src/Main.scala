@@ -9,7 +9,7 @@ object Main {
     val (r,tamanho,palavras,coordenadas) = Utils.readFromFile(ficheiro)
     val inic= Tasks.setBoardsWithWords(List.fill(tamanho, tamanho)(0),palavras,coordenadas)
     val (board,random)=Tasks.completeBoardRandomly(inic,MyRandom(r),Tasks.randomChar)
-    Utils.changeR(r,ficheiro)
+    Utils.changeR(random,ficheiro)
     jogar(board,palavras,List())
   }
   def jogar(board: Board,procura:List[String],encontradas:List[String]):Unit={
