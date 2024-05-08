@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mouseTransparent="true" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+   <children>
+      <TextField fx:id="playerName" layoutX="216.0" layoutY="227.0" prefHeight="38.0" prefWidth="168.0" promptText="Insert your username">
+         <font>
+            <Font size="15.0" />
+         </font></TextField>
+      <Button fx:id="startGameButton" layoutX="231.0" layoutY="308.0" onAction="#onStartGameButtonClicked" prefHeight="64.0" prefWidth="140.0" text="Start Game">
+         <font>
+            <Font size="22.0" />
+         </font></Button>
+      <Label fx:id="gameName" layoutX="217.0" layoutY="129.0" text="ZIGZAG GAME">
+         <font>
+            <Font size="26.0" />
+         </font></Label>
+
+   </children>
+</AnchorPane>
