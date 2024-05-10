@@ -16,7 +16,7 @@ class MainController {
 
   @FXML
   private def openSecondWindow(event: ActionEvent): Unit = {
-    val loader = new FXMLLoader(getClass.getResource("GUI/BoardWindow.fxml"))
+    val loader = new FXMLLoader(getClass.getResource("BoardWindow.fxml"))
     val root: Parent = loader.load()
     val stage = new Stage()
     stage.setScene(new Scene(root))

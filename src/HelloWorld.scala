@@ -6,7 +6,7 @@ import javafx.stage.Stage
 class HelloWorld extends Application {
   override def start(primaryStage: Stage): Unit = {
     primaryStage.setTitle("My Hello World App")
-    val fxmlLoader = new FXMLLoader(getClass.getResource("GUI/MainWindow.fxml"))
+    val fxmlLoader = new FXMLLoader(getClass.getResource("MainWindow.fxml"))
     val mainViewRoot: Parent = fxmlLoader.load()
     val scene = new Scene(mainViewRoot)
     primaryStage.setScene(scene)

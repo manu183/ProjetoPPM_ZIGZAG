@@ -32,14 +32,14 @@ object Tasks {
     }
   }
   @tailrec
-  def comleteBoard(inic:Board, r:MyRandom, palavras:List[String]):(Board,MyRandom)={
+  def completeBoard(inic:Board, r:MyRandom, palavras:List[String]):(Board,MyRandom)={
     val (boardFim, random) = completeBoardRandomly(inic, r, Tasks.randomChar)
     if (Tasks.checkBoard(boardFim,palavras)) {
       (boardFim,r)
     } else {
       println("NAO FUNCIONOU")
       printBoard(boardFim)
-      comleteBoard(inic,random,palavras)
+      completeBoard(inic,random,palavras)
     }
   }
   //t4
@@ -63,8 +63,6 @@ object Tasks {
   }
 
   //t5
-
-
   def play(board:Board,palavra:String,start: Coord2D,dir:Direction):Int={
     //Retorna se c esta na coordenada coord no board
     def checkLetter(c:Char,coord:Coord2D):Boolean= {

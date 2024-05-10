@@ -10,7 +10,7 @@ object Main {
     val (r, tamanho, palavras, coordenadas) = Utils.readFromFile(file)
 
     val inic = Tasks.setBoardsWithWords(List.fill(tamanho, tamanho)(0), palavras, coordenadas)
-    val (board,finalR)=Tasks.comleteBoard(inic, MyRandom(r), palavras)
+    val (board,finalR)=Tasks.completeBoard(inic, MyRandom(r), palavras)
     Utils.writeToRandomtofile(finalR.nextInt._1,file)
     jogar(board, palavras, List())
   }
