@@ -1,23 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainController">
-   <children>
-      <TextField fx:id="playerName" layoutX="216.0" layoutY="227.0" prefHeight="38.0" prefWidth="168.0" promptText="Insert your username">
-         <font>
-            <Font size="15.0" />
-         </font></TextField>
-      <Button fx:id="startGameButton" layoutX="231.0" layoutY="308.0" onAction="#openSecondWindow" prefHeight="64.0" prefWidth="140.0" text="Start Game">
-         <font>
-            <Font size="22.0" />
-         </font></Button>
-      <Label fx:id="gameName" layoutX="217.0" layoutY="129.0" text="ZIGZAG GAME">
-         <font>
-            <Font size="26.0" />
-         </font></Label>
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-min-height: 400; -fx-min-width: 600;" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainController">
+   <center>
+      <VBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
+         <Label fx:id="gameName" layoutX="217.0" layoutY="129.0" text="ZIGZAG GAME">
+            <font>
+               <Font size="26.0" />
+            </font></Label>
+         <TextField fx:id="playerName" layoutX="216.0" layoutY="227.0" prefHeight="38.0" prefWidth="168.0" promptText="Insert your username">
+            <font>
+               <Font size="15.0" />
+            </font></TextField>
+         <Button fx:id="startGameButton" layoutX="231.0" layoutY="308.0" onAction="#openSecondWindow" prefHeight="64.0" prefWidth="140.0" text="Start Game">
+            <font>
+               <Font size="22.0" />
+            </font></Button>
+         <padding>
+            <Insets left="100.0" right="100.0" />
+         </padding>
 
-   </children>
-</AnchorPane>
+      </VBox>
+
+
+   </center>
+</BorderPane>

@@ -1,41 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-min-height: 400; -fx-min-width: 600;" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BoardController">
-    <right>
-        <VBox alignment="CENTER_LEFT" spacing="10">
-            <Button fx:id="button1" onMouseClicked="#changeGridPaneColor" text="Button 1" />
-            <Button text="Button 2" />
-            <Button text="Button 3" />
-        </VBox>
-    </right>
-
     <center>
-      <GridPane fx:id="gridPane" gridLinesVisible="true" BorderPane.alignment="CENTER_LEFT">
-        <columnConstraints>
+        <HBox spacing="10.0">
+         <children>
+            <GridPane fx:id="gridPane" gridLinesVisible="true">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+            </GridPane>
+             <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10" style="-fx-background-color: red;" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                 <children>
 
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="30.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="30.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="30.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="30.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="30.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-      </GridPane>
-   </center>
-   <top>
-      <TitledPane animated="false" text="ZIGZAG Game" BorderPane.alignment="CENTER">
-        <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="598.0" />
-        </content>
-      </TitledPane>
-   </top>
+                     <HBox alignment="CENTER" fillHeight="false" style="-fx-background-color: green;" VBox.vgrow="NEVER">
+                         <children>
+                             <TextField maxWidth="1.7976931348623157E308" HBox.hgrow="SOMETIMES" />
+                             <Button maxWidth="1.7976931348623157E308" minWidth="60.0" mnemonicParsing="false" text="Verificar" HBox.hgrow="ALWAYS" />
+                         </children>
+                     </HBox>
+                     <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Recomeçar" HBox.hgrow="ALWAYS" VBox.vgrow="SOMETIMES" />
+                     <Button fx:id="closeButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#closeButtonClicked" text="Sair" HBox.hgrow="ALWAYS" VBox.vgrow="SOMETIMES" />
+                 </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+             </VBox>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding></HBox>
+
+
+    </center>
+    <top>
+        <AnchorPane prefHeight="24.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label fx:id="topBarName" layoutX="3.0" layoutY="1.0" prefHeight="26.0" prefWidth="142.0" text="ZIGZAG Game ">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+    </top>
 </BorderPane>
