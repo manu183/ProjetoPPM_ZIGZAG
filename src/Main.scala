@@ -1,24 +1,21 @@
-import Utils.{Board, Direction, getPlay, jogarMenu}
+import Utils.Board
 
 import scala.sys.exit
 
 object Main {
   val file = "level.txt"
-  val home = System.getProperty("user.home")
-  val directory = s"${home}/IdeaProjects/ProjetoPPM_ZIGZAG/src/${file}"
-
   def main(args: Array[String]): Unit = {
 
     Utils.firstMenu()
-    val (r, tamanho, palavras, coordenadas) = Utils.readFromFile(directory)
+    val (r, tamanho, palavras, coordenadas) = Utils.readFromFile(file)
 
     val inic = Tasks.setBoardsWithWords(List.fill(tamanho, tamanho)(0), palavras, coordenadas)
-    val (board, random) = Tasks.completeBoardRandomly(inic, MyRandom(r), Tasks.randomChar)
-    Utils.changeR(random.nextInt._1, directory)
+    val (board,finalR)=Tasks.comleteBoard(inic, MyRandom(r), palavras)
+    Utils.writeToRandomtofile(finalR.nextInt._1,file)
     jogar(board, palavras, List())
   }
 
-  def jogar(board: Board, procura: List[String], encontradas: List[String]): Unit = {
+  private def jogar(board: Board, procura: List[String], encontradas: List[String]): Unit = {
     print("Palavras por encontrar--")
     println(procura)
     print("Palavras encontradas--")
@@ -33,7 +30,7 @@ object Main {
       case 1 =>
         val (palavra, coordenada, direcao) = Utils.getPlay()
         if (procura.contains(palavra)) {
-          if (Tasks.play(board, palavra, coordenada, direcao)) {
+          if (Tasks.play(board, palavra, coordenada, direcao)>=1) {
             println("ACERTOU A PALAVRA---" + palavra)
             jogar(board, procura.filterNot(_ == palavra), palavra :: encontradas)
           }

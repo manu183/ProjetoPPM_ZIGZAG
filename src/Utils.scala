@@ -82,7 +82,6 @@ object Utils {
     println("Formato da jogada -PALAVRA (y,x) 0-7")
     val line = scala.io.StdIn.readLine()
     val parts = line.split(" ")
-    val palavra = parts.head
     val Array(x, y) = parts(1).stripPrefix("(").stripSuffix(")").split(",")
     val directions = Utils.Direction.values.toList
 
@@ -115,7 +114,7 @@ object Utils {
 
   }
 
-  def changeR(r: Int, file: String): Unit = {
+  def writeToRandomtofile(r: Int, file: String): Unit = {
     val bufferedSource = Source.fromFile(file)
     val linhas = bufferedSource.getLines.toList
     bufferedSource.close()
