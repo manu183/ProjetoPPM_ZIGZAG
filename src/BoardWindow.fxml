@@ -9,13 +9,13 @@
     <center>
         <HBox spacing="10.0">
          <children>
-            <GridPane fx:id="gridPane" gridLinesVisible="true">
+            <GridPane fx:id="gridPane" gridLinesVisible="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" HBox.hgrow="ALWAYS">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
               </columnConstraints>
               <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -30,7 +30,7 @@
 
                      <HBox alignment="CENTER" fillHeight="false" style="-fx-background-color: green;" VBox.vgrow="NEVER">
                          <children>
-                             <TextField fx:id="textField" maxWidth="1.7976931348623157E308" HBox.hgrow="SOMETIMES" />
+                             <TextField fx:id="textField" editable="false" maxWidth="1.7976931348623157E308" HBox.hgrow="SOMETIMES" />
                              <Button fx:id="checkButton" maxWidth="1.7976931348623157E308" minWidth="60.0" mnemonicParsing="false" onMouseClicked="#checkButtonClicked" text="Verificar" HBox.hgrow="ALWAYS" />
                          </children>
                      </HBox>

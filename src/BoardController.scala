@@ -1,7 +1,8 @@
 import Utils.Direction.Direction
 import Utils.{Board, Coord2D}
 import javafx.fxml.FXML
-import javafx.scene.control.{Button, Label, TextField, ToggleButton}
+import javafx.scene.control.Alert.AlertType
+import javafx.scene.control.{Alert, Button, Label, TextField, ToggleButton}
 import javafx.scene.layout.{BorderPane, GridPane}
 
 
@@ -26,7 +27,7 @@ class BoardController {
     topBarName.setText("ZIGZAG Game - " + playerName)
   }
 
-  def updateTextField(): Unit = {
+  private def updateTextField(): Unit = {
     var currentAnswer = " "
     if(currentBoardAnswer.isEmpty) currentAnswer = " "
     else
@@ -45,9 +46,9 @@ class BoardController {
 
     val inic = Tasks.setBoardsWithWords(List.fill(tamanho, tamanho)(0), palavras, coordenadas)
     val (board, finalR) = Tasks.completeBoard(inic, MyRandom(r), palavras)
-    mainBoard = board
+    mainBoard= board
     Utils.writeToRandomtofile(finalR.nextInt._1, file)
-    writeWordsToGUI(board, gridPane)
+    writeWordsToGUI(mainBoard, gridPane)
 
   }
 
@@ -80,22 +81,38 @@ class BoardController {
   }
 
 
-  def getInitialDirection(): Direction = {
+  private def getInitialDirection(): Direction = {
     println("Hi")
     println(currentBoardAnswer)
-    val firstChar = currentBoardAnswer.head._1.getText
-    val secondChar = currentBoardAnswer(1)._1.getText
-    var (x1, y1) = currentBoardAnswer.head._2
-    var (x2, y2) = currentBoardAnswer(1)._2
+    val (x1, y1) = currentBoardAnswer.head._2 // Coord2D of first char
+    val (x2, y2) = currentBoardAnswer(1)._2 // Coord2D of second char
     println(Utils.getDirection((y1, x1), (y2, x2)))
     Utils.getDirection((y1, x1), (y2, x2))
   }
 
   def checkButtonClicked(): Unit = {
     println("Clicked")
-    println(textField.getText, currentBoardAnswer.head._2, getInitialDirection())
-    val res = Tasks.play(mainBoard, textField.getText, currentBoardAnswer.head._2, getInitialDirection())
+    println(mainBoard,textField.getText, currentBoardAnswer.head._2,getInitialDirection())
+    val res = Tasks.play(mainBoard, textField.getText.toString,currentBoardAnswer.head._2, getInitialDirection())
     println(res)
+    if(res >= 1) acertouPalavra()
+    else errouPalavra()
+  }
+
+  def acertouPalavra(): Unit = {
+    val alert = new Alert(AlertType.INFORMATION)
+    alert.setTitle("Acertou!!!")
+    alert.setHeaderText(null)
+    alert.setContentText("Acertou a palavra " + textField.getText + "!")
+    alert.showAndWait();
+  }
+  def errouPalavra(): Unit = {
+    val alert = new Alert(AlertType.INFORMATION)
+    alert.setTitle("Mensagem")
+    alert.setHeaderText(null)
+    alert.setContentText("Errou a palavra ! Recomece!")
+    alert.showAndWait();
+    restartButtonClicked()
   }
 
 
@@ -112,6 +129,8 @@ class BoardController {
     }
 
   }
+
+
 
   def closeButtonClicked(): Unit = {
     System.exit(0)
