@@ -27,6 +27,30 @@ object Utils {
         case SouthWest => (coord._1 + 1, coord._2 - 1)
       }
     }
+
+
+  }
+  def getDirection(coord1: Coord2D, coord2: Coord2D): Direction.Direction = {
+    // Verifica se as coordenadas são iguais em relação ao eixo horizontal
+    if (coord1._1 == coord2._1) {
+      // Verifica se coord1 está à esquerda ou à direita de coord2
+      if (coord1._2 < coord2._2) Direction.East
+      else Direction.West
+    }
+    // Verifica se as coordenadas são iguais em relação ao eixo vertical
+    else if (coord1._2 == coord2._2) {
+      // Verifica se coord1 está acima ou abaixo de coord2
+      if (coord1._1 < coord2._1) Direction.South
+      else Direction.North
+    }
+    // Verifica se coord1 está à direita e abaixo de coord2
+    else if (coord1._1 < coord2._1 && coord1._2 < coord2._2) Direction.SouthEast
+    // Verifica se coord1 está à esquerda e abaixo de coord2
+    else if (coord1._1 < coord2._1 && coord1._2 > coord2._2) Direction.SouthWest
+    // Verifica se coord1 está à direita e acima de coord2
+    else if (coord1._1 > coord2._1 && coord1._2 < coord2._2) Direction.NorthEast
+    // Verifica se coord1 está à esquerda e acima de coord2
+    else Direction.NorthWest
   }
 
   def printBoard(board: Board): Unit = {
