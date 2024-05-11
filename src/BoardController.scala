@@ -16,7 +16,6 @@ class BoardController {
   @FXML private var restartButton: Button = _
   @FXML private var closeButton: Button = _
   private var playerName: String = _
-  @FXML private var matrixButtons: List[List[Button]] = _
   @FXML private var textField: TextField = _
   private var currentBoardAnswer: List[(ToggleButton, Coord2D)] = List()
   private var mainBoard: Board = _
@@ -50,7 +49,6 @@ class BoardController {
     Utils.writeToRandomtofile(finalR.nextInt._1, file)
     writeWordsToGUI(board, gridPane)
 
-
   }
 
   private def writeWordsToGUI(board: Board, gridPane: GridPane): Unit = {
@@ -81,22 +79,23 @@ class BoardController {
     updateTextField()
   }
 
-  private def restartMatrixToogleButton(toggleButton: ToggleButton): Unit = {
-    toggleButton.setSelected(false)
-  }
 
   def getInitialDirection(): Direction = {
-    currentBoardAnswer match {
-      case (_, coord1) :: (_, coord2) :: _ =>
-        Utils.getDirection(coord1, coord2)
-      case _ => throw new IllegalArgumentException("A lista currentBoardAnswer deve conter exatamente dois elementos.")
-    }
+    println("Hi")
+    println(currentBoardAnswer)
+    val firstChar = currentBoardAnswer.head._1.getText
+    val secondChar = currentBoardAnswer(1)._1.getText
+    var (x1, y1) = currentBoardAnswer.head._2
+    var (x2, y2) = currentBoardAnswer(1)._2
+    println(Utils.getDirection((y1, x1), (y2, x2)))
+    Utils.getDirection((y1, x1), (y2, x2))
   }
 
   def checkButtonClicked(): Unit = {
     println("Clicked")
+    println(textField.getText, currentBoardAnswer.head._2, getInitialDirection())
     val res = Tasks.play(mainBoard, textField.getText, currentBoardAnswer.head._2, getInitialDirection())
-    //println(res00)
+    println(res)
   }
 
 
@@ -105,24 +104,17 @@ class BoardController {
     println("Restart")
     currentBoardAnswer = List()
     updateTextField()
-    gridPane.getChildren.forEach((child) => {
-      if (child.isInstanceOf[ToggleButton]) {
-        val toggleButton = child.asInstanceOf[ToggleButton]
+    gridPane.getChildren.forEach {
+      case toggleButton: ToggleButton =>
         //println(toggleButton.getText.toString)
         toggleButton.setSelected(false)
-      }
-    })
+      case _ =>
+    }
 
   }
 
   def closeButtonClicked(): Unit = {
     System.exit(0)
-  }
-
-  def changeGridPaneColor(): Unit = {
-    gridPane.getChildren.forEach(cell => {
-      cell.setStyle("-fx-background-color: #FF0000")
-    })
   }
 
 
