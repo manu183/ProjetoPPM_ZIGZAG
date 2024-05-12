@@ -13,16 +13,13 @@ import scala.concurrent.duration.Duration
 
 class BoardController {
 
-  @FXML private var borderPane: BorderPane = _
   @FXML private var gridPane: GridPane = _
   @FXML private var topBarName: Label = _
-  @FXML private var checkButton: Button = _
-  @FXML private var restartButton: Button = _
-  @FXML private var closeButton: Button = _
   private var playerName: String = _
   @FXML private var textField: TextField = _
   private var currentBoardAnswer: List[(ToggleButton, Coord2D)] = List()
   private var mainBoard: Board = _
+  private var wordsTofind :List[String]=Nil
 
 
   def setPlayerName(name: String): Unit = {
@@ -46,9 +43,9 @@ class BoardController {
     val file = "level.txt"
 
     val (r, tamanho, palavras, coordenadas) = Utils.readFromFile(file)
-
-    val inic = Tasks.setBoardsWithWords(List.fill(tamanho, tamanho)(0), palavras, coordenadas)
-    val (board, finalR) = Tasks.completeBoard(inic, MyRandom(r), palavras)
+    wordsTofind=palavras
+    val inic = Tasks.setBoardsWithWords(List.fill(tamanho, tamanho)(0), wordsTofind, coordenadas)
+    val (board, finalR) = Tasks.completeBoard(inic, MyRandom(r), wordsTofind)
     mainBoard= board
     Utils.writeToRandomtofile(finalR.nextInt._1, file)
     writeWordsToGUI(mainBoard, gridPane)
@@ -91,13 +88,23 @@ class BoardController {
   }
 
   def checkButtonClicked(): Unit = {
-    println("Checking...")
+    /*println("Checking...")
     println(textField.getText)
-    println(currentBoardAnswer.head._2)
-    println(getInitialDirection())
+    println(currentBoardAnswer.head._2*/
+    //println(getInitialDirection())
+    if(!Utils.adjacentCoordinates(currentBoardAnswer.map(_._2))){
+      println("TEM QUE ESCOLHER COORDENADAS ADJACENTES")
+      apagarButtonClicked()
+      return
+    }
+    if (!wordsTofind.contains(textField.getText)) {
+      println("Palavra não estou á procura")
+      apagarButtonClicked()
+      return
+    }
+
 
     val res = Tasks.play(mainBoard, textField.getText,currentBoardAnswer.head._2, getInitialDirection())
-    //val res = Tasks.play(mainBoard, "carrossel",(0, 0):Coord2D, Direction.South)
     println(res)
     if(res >= 1){
 
@@ -107,19 +114,11 @@ class BoardController {
           toggleButton.setStyle("-fx-background-color: green")
       }
       acertouPalavra()
-    }
 
-    else {
-      currentBoardAnswer.foreach {
-        case (toggleButton, _) =>
-          toggleButton.setStyle("-fx-background-color: red")
-      }
-      errouPalavra()
-      currentBoardAnswer.foreach {
-        case (toggleButton, _) =>
-          toggleButton.setStyle("-fx-background-color: grey")
-      }
     }
+    else
+      errouPalavra()
+    apagarButtonClicked()
   }
 
   private def acertouPalavra(): Unit = {
@@ -127,20 +126,19 @@ class BoardController {
     alert.setTitle("Acertou!!!")
     alert.setHeaderText(null)
     alert.setContentText("Acertou a palavra " + textField.getText + "!")
-    alert.showAndWait();
+    alert.showAndWait()
   }
   private def errouPalavra(): Unit = {
     val alert = new Alert(AlertType.INFORMATION)
     alert.setTitle("Mensagem")
     alert.setHeaderText(null)
     alert.setContentText("Errou a palavra ! Recomece!")
-    alert.showAndWait();
-    restartButtonClicked()
+    alert.showAndWait()
   }
 
 
 
-  def restartButtonClicked(): Unit = {
+  def apagarButtonClicked(): Unit = {
     println("Restart")
     currentBoardAnswer = List()
     updateTextField()
@@ -153,7 +151,10 @@ class BoardController {
 
   }
 
-
+  def newGameButtonClicked():Unit = {
+    apagarButtonClicked()
+    initialize()
+  }
 
   def closeButtonClicked(): Unit = {
     System.exit(0)

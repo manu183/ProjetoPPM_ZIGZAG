@@ -1,4 +1,5 @@
 import Utils.Coord2D
+import Utils.Direction.addDirection
 
 import java.io.{File, PrintWriter}
 import scala.annotation.tailrec
@@ -30,30 +31,27 @@ object Utils {
 
 
   }
-
 def getDirection(coord1: Coord2D, coord2: Coord2D): Direction.Direction = {
   //As coordenadas são (y,x)!!!!!!!!!
 
-  if (coord1 == coord2) throw new IllegalArgumentException("Coordenadas inválidas. Direção não encontrada.")
-
-  if (coord2._1 < coord1._1) {
-    if (coord1._2 > coord2._2) Direction.NorthWest
-    else if (coord1._2 < coord2._2) Direction.NorthEast
-    else Direction.North
+  val result =Direction.values.find(dir=>coord2==Direction.addDirection(coord1,dir))
+  result match{
+    case Some(element) => element // Return the element if found
+    case None => throw new NoSuchElementException("Coordenadas erradas")
   }
-  else if (coord2._1 > coord1._1) {
-    if (coord1._2 > coord2._2) Direction.SouthWest
-    else if (coord1._2 < coord2._2) Direction.SouthEast
-    else Direction.South
-  }
-  else if (coord1._1 == coord2._1) {
-    if (coord1._2 > coord2._2) Direction.West
-    else if (coord1._2 < coord2._2) Direction.East
-    else throw new IllegalArgumentException("Coordenadas inválidas. Direção não encontrada.")
-  }
-  else throw new IllegalArgumentException("Coordenadas inválidas. Direção não encontrada.")
 }
 
+  def adjacentCoordinates(lst:List[Coord2D]):Boolean={
+    def connected(a:Coord2D,b:Coord2D):Boolean={
+      val temp=List(-1,0,1)
+      temp.contains(a._1-b._1)&&temp.contains(a._2-b._2)
+    }
+    lst match{
+      case _::Nil=>true
+      case x::xs=>if(connected(x,xs.head)) adjacentCoordinates(xs) else false
+      }
+
+  }
 
   def printBoard(board: Board): Unit = {
     board.map(x => println(x.mkString("  ")))
@@ -156,19 +154,7 @@ def getDirection(coord1: Coord2D, coord2: Coord2D): Direction.Direction = {
   }
 
   def main(args: Array[String]): Unit = {
-    //Teste getDirection
-    //As coordenadas são (y,x)
-    println(Utils.getDirection((0, 0), (1, 1))) //NorthEast
-    println(Utils.getDirection((0, 0), (1, 0))) //North
-    println(Utils.getDirection((0, 0), (1, -1))) //Northwest
-    println(Utils.getDirection((0, 0), (0, -1))) //West
-    println(Utils.getDirection((0, 0), (-1, -1))) //Southwest
-    println(Utils.getDirection((0, 0), (-1, 0))) //South
-    println(Utils.getDirection((0, 0), (-1, 1))) //SouthEast
-    println(Utils.getDirection((0, 0), (0, 1))) //East
-    //println(Utils.getDirection((0, 0), (0, 0))) //Error
-    println(Utils.getDirection((0, 0), (1, 2))) //NorthEast
-    println(Utils.getDirection((0, 0), (2, 1))) //NorthEast
+    print(adjacentCoordinates(List((8,0), (1,0), (2,0) ,(3,0), (4,0), (4,1), (4,2), (4,3), (4,4))))
 
   }
 }

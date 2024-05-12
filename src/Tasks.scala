@@ -37,8 +37,6 @@ object Tasks {
     if (Tasks.checkBoard(boardFim,palavras)) {
       (boardFim,r)
     } else {
-      println("NAO FUNCIONOU")
-      printBoard(boardFim)
       completeBoard(inic,random,palavras)
     }
   }
