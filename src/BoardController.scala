@@ -1,9 +1,12 @@
 import Utils.Direction.Direction
-import Utils.{Board, Coord2D}
+import Utils.{Board, Coord2D, Direction}
+import javafx.animation.{Animation, KeyFrame, Timeline}
 import javafx.fxml.FXML
 import javafx.scene.control.Alert.AlertType
 import javafx.scene.control.{Alert, Button, Label, TextField, ToggleButton}
 import javafx.scene.layout.{BorderPane, GridPane}
+
+import scala.concurrent.duration.Duration
 
 
 
@@ -28,7 +31,7 @@ class BoardController {
   }
 
   private def updateTextField(): Unit = {
-    var currentAnswer = " "
+    var currentAnswer = ""
     if(currentBoardAnswer.isEmpty) currentAnswer = " "
     else
       for ((toggleButton,_) <- currentBoardAnswer) {
@@ -82,31 +85,51 @@ class BoardController {
 
 
   private def getInitialDirection(): Direction = {
-    println("Hi")
-    println(currentBoardAnswer)
     val (x1, y1) = currentBoardAnswer.head._2 // Coord2D of first char
     val (x2, y2) = currentBoardAnswer(1)._2 // Coord2D of second char
-    println(Utils.getDirection((y1, x1), (y2, x2)))
     Utils.getDirection((y1, x1), (y2, x2))
   }
 
   def checkButtonClicked(): Unit = {
-    println("Clicked")
-    println(mainBoard,textField.getText, currentBoardAnswer.head._2,getInitialDirection())
-    val res = Tasks.play(mainBoard, textField.getText.toString,currentBoardAnswer.head._2, getInitialDirection())
+    println("Checking...")
+    println(textField.getText)
+    println(currentBoardAnswer.head._2)
+    println(getInitialDirection())
+
+    val res = Tasks.play(mainBoard, textField.getText,currentBoardAnswer.head._2, getInitialDirection())
+    //val res = Tasks.play(mainBoard, "carrossel",(0, 0):Coord2D, Direction.South)
     println(res)
-    if(res >= 1) acertouPalavra()
-    else errouPalavra()
+    if(res >= 1){
+
+      //print board buttons to green
+      currentBoardAnswer.foreach {
+        case (toggleButton, _) =>
+          toggleButton.setStyle("-fx-background-color: green")
+      }
+      acertouPalavra()
+    }
+
+    else {
+      currentBoardAnswer.foreach {
+        case (toggleButton, _) =>
+          toggleButton.setStyle("-fx-background-color: red")
+      }
+      errouPalavra()
+      currentBoardAnswer.foreach {
+        case (toggleButton, _) =>
+          toggleButton.setStyle("-fx-background-color: grey")
+      }
+    }
   }
 
-  def acertouPalavra(): Unit = {
+  private def acertouPalavra(): Unit = {
     val alert = new Alert(AlertType.INFORMATION)
     alert.setTitle("Acertou!!!")
     alert.setHeaderText(null)
     alert.setContentText("Acertou a palavra " + textField.getText + "!")
     alert.showAndWait();
   }
-  def errouPalavra(): Unit = {
+  private def errouPalavra(): Unit = {
     val alert = new Alert(AlertType.INFORMATION)
     alert.setTitle("Mensagem")
     alert.setHeaderText(null)
