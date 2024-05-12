@@ -1,14 +1,12 @@
 import Utils.Direction.Direction
-import Utils.{Board, Coord2D, Direction}
-import javafx.animation.{Animation, KeyFrame, Timeline}
+import Utils.{Board, Coord2D}
 import javafx.fxml.FXML
 import javafx.scene.control.Alert.AlertType
-import javafx.scene.control.{Alert, Button, Label, TextField, ToggleButton}
-import javafx.scene.layout.{BorderPane, GridPane}
-
-import scala.concurrent.duration.Duration
-
-
+import javafx.scene.control.{Alert, Label, TextField, ToggleButton}
+import javafx.scene.layout.GridPane
+import javafx.animation.{Animation, KeyFrame, Timeline}
+import javafx.event.ActionEvent
+import javafx.util.Duration
 
 
 class BoardController {
@@ -19,7 +17,12 @@ class BoardController {
   @FXML private var textField: TextField = _
   private var currentBoardAnswer: List[(ToggleButton, Coord2D)] = List()
   private var mainBoard: Board = _
-  private var wordsTofind :List[String]=Nil
+  private var wordsTofind: List[String] = Nil
+  private var wordsFounded: List[String] = Nil
+  private var secondsPassed: Int = 0
+
+
+  @FXML private var timer: Label = _
 
 
   def setPlayerName(name: String): Unit = {
@@ -27,12 +30,33 @@ class BoardController {
     topBarName.setText("ZIGZAG Game - " + playerName)
   }
 
+  def passOneSecond(t: String): String = {
+    secondsPassed += 1
+    val time = t.split(":")
+    var hour = time(0).toInt
+    var minute = time(1).toInt
+    var second = time(2).toInt
+
+    if (second + 1 < 60)
+      return hour.toString + ":" + minute.toString + ":" + (second + 1).toString
+    else {
+      second = 0
+      if (minute + 1 < 60)
+        return hour.toString + ":" + (minute + 1).toString + ":00"
+      else {
+        minute = 0
+        hour += 1
+        return hour.toString + ":00:00"
+      }
+    }
+  }
+
+
   private def updateTextField(): Unit = {
     var currentAnswer = ""
-    if(currentBoardAnswer.isEmpty) currentAnswer = " "
+    if (currentBoardAnswer.isEmpty) currentAnswer = " "
     else
-      for ((toggleButton,_) <- currentBoardAnswer) {
-        //println(toggleButton.getText)
+      for ((toggleButton, _) <- currentBoardAnswer) {
         currentAnswer += toggleButton.getText
       }
     textField.setText(currentAnswer)
@@ -43,12 +67,22 @@ class BoardController {
     val file = "level.txt"
 
     val (r, tamanho, palavras, coordenadas) = Utils.readFromFile(file)
-    wordsTofind=palavras
+    wordsTofind = palavras
     val inic = Tasks.setBoardsWithWords(List.fill(tamanho, tamanho)(0), wordsTofind, coordenadas)
     val (board, finalR) = Tasks.completeBoard(inic, MyRandom(r), wordsTofind)
-    mainBoard= board
+    mainBoard = board
     Utils.writeToRandomtofile(finalR.nextInt._1, file)
     writeWordsToGUI(mainBoard, gridPane)
+
+    timer.setText("00:00:00")
+    val timeline = new Timeline(
+      new KeyFrame(Duration.seconds(1), (_: ActionEvent) => {
+        val currentTime = timer.getText()
+        timer.setText(passOneSecond(currentTime))
+      })
+    )
+    timeline.setCycleCount(Animation.INDEFINITE)
+    timeline.play()
 
   }
 
@@ -69,7 +103,6 @@ class BoardController {
   }
 
 
-
   private def onClickMatrixButton(toggleButton: ToggleButton, column: Int, row: Int): Unit = {
     val coord = (column, row)
     currentBoardAnswer = if (currentBoardAnswer.map(_._1).contains(toggleButton)) {
@@ -88,25 +121,19 @@ class BoardController {
   }
 
   def checkButtonClicked(): Unit = {
-    /*println("Checking...")
-    println(textField.getText)
-    println(currentBoardAnswer.head._2*/
-    //println(getInitialDirection())
-    if(!Utils.adjacentCoordinates(currentBoardAnswer.map(_._2))){
-      println("TEM QUE ESCOLHER COORDENADAS ADJACENTES")
+    if (!Utils.adjacentCoordinates(currentBoardAnswer.map(_._2))) {
+      popup("TEM QUE ESCOLHER COORDENADAS ADJACENTES")
       apagarButtonClicked()
       return
     }
     if (!wordsTofind.contains(textField.getText)) {
-      println("Palavra não estou á procura")
+      popup("ERROU!")
       apagarButtonClicked()
       return
     }
 
-
-    val res = Tasks.play(mainBoard, textField.getText,currentBoardAnswer.head._2, getInitialDirection())
-    println(res)
-    if(res >= 1){
+    val res = Tasks.play(mainBoard, textField.getText, currentBoardAnswer.head._2, getInitialDirection())
+    if (res >= 1) {
 
       //print board buttons to green
       currentBoardAnswer.foreach {
@@ -127,36 +154,61 @@ class BoardController {
     alert.setHeaderText(null)
     alert.setContentText("Acertou a palavra " + textField.getText + "!")
     alert.showAndWait()
+    wordsFounded = wordsFounded :+ textField.getText
+    wordsTofind = wordsTofind.filterNot(_ == textField.getText)
+    if (wordsTofind.isEmpty) {
+      gameWon()
+    }
   }
+
   private def errouPalavra(): Unit = {
     val alert = new Alert(AlertType.INFORMATION)
-    alert.setTitle("Mensagem")
+    alert.setTitle("Errou")
     alert.setHeaderText(null)
     alert.setContentText("Errou a palavra ! Recomece!")
     alert.showAndWait()
   }
 
 
+  private def popup(message: String): Unit = {
+    val alert = new Alert(AlertType.INFORMATION)
+    alert.setTitle("Mensagem")
+    alert.setHeaderText(null)
+    alert.setContentText(message)
+    alert.showAndWait()
+  }
+
 
   def apagarButtonClicked(): Unit = {
-    println("Restart")
     currentBoardAnswer = List()
     updateTextField()
     gridPane.getChildren.forEach {
       case toggleButton: ToggleButton =>
-        //println(toggleButton.getText.toString)
         toggleButton.setSelected(false)
       case _ =>
     }
 
   }
 
-  def newGameButtonClicked():Unit = {
+  def newGameButtonClicked(): Unit = {
     apagarButtonClicked()
     initialize()
   }
 
+
   def closeButtonClicked(): Unit = {
+    System.exit(0)
+  }
+
+  private def gameWon(): Unit = {
+    val alert = new Alert(AlertType.INFORMATION)
+    alert.setTitle("Parabens")
+    alert.setHeaderText(null)
+    val text ="Ganhou o jogo! O seu score foi de " + (wordsFounded.length * 100 - secondsPassed) + "!"
+    val words = "\nAcertou as palavras: " + wordsFounded.mkString(", ")
+    val tempo ="\nTempo: " + timer.getText()
+    alert.setContentText(text+ words+tempo)
+    alert.showAndWait()
     System.exit(0)
   }
 
